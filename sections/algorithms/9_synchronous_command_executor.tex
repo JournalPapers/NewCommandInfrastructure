@@ -1,0 +1,21 @@
+\subsection{SynchronousCommandExecutorImplementation} 
+\begin{algorithm}[H]
+\caption{SynchronousCommandExecutorImplementation (\emph{Class}) One of Multiple Selectable Executors (Sync, Async etc) via Configuration Properties}
+\begin{algorithmic}[1]
+\Procedure{Execute}{command : Command\textlangle REQ\textrangle}
+    \State \textbf{Input:} command of type \textlangle REQ\textrangle
+    \State \textbf{Output:} Supplier of type \textlangle RES\textrangle
+    \State \textbf{Description:} Executes the command synchronously by invoking all middlewares and routing to the appropriate handler.
+    \State
+    \State \textit{Note:} This implementation is conditionally activated based on application configuration
+    (e.g., \texttt{command.executor = sync, async, disruptor etc}), 
+    allowing multiple executor implementations to coexist and be selected at runtime.
+    \State
+    \ForAll{middleware \textbf{in} middlewares}
+        \State middleware.Invoke(command)
+    \EndFor
+    \State handler $\gets$ router.Route(command)
+    \State \textbf{Return:} a Supplier that, when invoked, executes handler.Handle(command) and returns the result
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}

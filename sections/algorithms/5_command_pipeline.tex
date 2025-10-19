@@ -1,0 +1,12 @@
+\subsection{CommandPipeline} 
+\begin{algorithm}[H]
+\caption{CommandPipeline (\emph{Interface})}
+\begin{algorithmic}[1]
+\Procedure{Send}{command : Command\textlangle REQ\textrangle} 
+    \State \textbf{Input:} command of type \textlangle REQ\textrangle
+    \State \textbf{Output:} Supplier of type \textlangle RES\textrangle
+    \State \textbf{Returns:} a function that produces the result when invoked
+    \State \textbf{Description:} Sends the command through the pipeline, applying any middleware and invoking the matching handler
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}

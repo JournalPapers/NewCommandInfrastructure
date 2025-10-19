@@ -1,0 +1,12 @@
+\subsection{CommandRouter} 
+\begin{algorithm}[H]
+\caption{CommandRouter (\emph{Interface})}
+\begin{algorithmic}[1]
+\Procedure{Route}{command : Command\textlangle REQ\textrangle} 
+    \State \textbf{Input:} command of type \textlangle REQ\textrangle
+    \State \textbf{Output:} CommandHandler of type\textlangle REQ, RES\textrangle
+    \State \textbf{Returns:} the handler responsible for processing the given command
+    \State \textbf{Description:} Determines the appropriate handler for the command based on its payload or type
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}

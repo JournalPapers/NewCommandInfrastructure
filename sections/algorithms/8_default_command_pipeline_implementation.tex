@@ -1,0 +1,34 @@
+\subsection{DefaultCommandPipelineImplementation} 
+\begin{algorithm}[H]
+\caption{DefaultCommandPipelineImplementation (\emph{Class})}
+\begin{algorithmic}[1]
+
+\Procedure{Send}{command : Command\textlangle REQ\textrangle} 
+    \State \textbf{Input:} command of type \textlangle REQ\textrangle
+    \State \textbf{Output:} Supplier of type \textlangle RES\textrangle
+    \State Ensure command is not null
+    \State baseSupplier $\gets$ executor.Execute(command) \Comment{Base supplier executes handler and middleware}
+
+    \State \textbf{Return} a Supplier that, when invoked, does:
+    \State \quad result $\gets$ null
+    \State \quad exception $\gets$ null
+    \State \quad \textbf{Try}
+    \State \quad \quad result $\gets$ baseSupplier.Get() \Comment{Execute handler logic}
+    \State \quad \textbf{Catch} ex
+    \State \quad \quad exception $\gets$ ex
+    \State \quad \textbf{End Try}
+
+    \State \quad \textbf{For each} postProcess in postProcesses \textbf{do}
+    \State \quad \quad typedProcessor $\gets$ (cast) postProcess to CommandPostProcessor \textlangle REQ\textrangle
+    \State \quad \quad typedProcessor.Run(command) \Comment{Execute post-processing}
+    \State \quad \textbf{End For}
+
+    \State \quad \textbf{If} exception $\neq$ null \textbf{then}
+    \State \quad \quad throw RuntimeException("Handler execution failed", exception)
+    \State \quad \textbf{End If}
+
+    \State \quad \textbf{Return} result
+\EndProcedure
+
+\end{algorithmic}
+\end{algorithm}

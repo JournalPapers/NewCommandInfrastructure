@@ -1,0 +1,78 @@
+\section{Functional Composition of the Command Pipeline}
+
+\subsection{Formal Definitions}
+
+Let:
+\begin{itemize}
+    \item $C$ — the set of all \textbf{commands}.
+    \item $R$ — the set of all \textbf{results}.
+    \item $E$ — the set of all \textbf{exceptions}.
+    \item $\mathcal{S}$ — the set of all \textbf{suppliers}, where $s \in \mathcal{S}$ is a function $s: \varnothing \to R \cup E$.
+\end{itemize}
+
+\subsection{Core Mappings}
+\[
+\begin{aligned}
+\text{route} &: C \to H && \text{(selects the appropriate handler)} \\
+\text{handle}_h &: C \to R \cup E && \text{(handler processes the command)} \\
+\text{exec} &: C \to \mathcal{S} && \text{(executor creates deferred computation)} \\
+\text{pre}_m &: C \to C && \text{(middleware transformation)} \\
+\text{post}_p &: C \times (R \cup \{\bot\}) \times (E \cup \{\bot\}) \to (R \cup \{\bot\}) \times (E \cup \{\bot\}) && \text{(post-processor)}
+\end{aligned}
+\]
+
+\subsection{Composed Pipeline Function}
+\[
+\mathrm{pipeline} = \mathrm{wrapPost} \circ \mathrm{exec}
+\]
+
+For a command $c \in C$:
+\[
+s = \mathrm{exec}(c)
+\]
+and
+\[
+\mathrm{wrapPost}(s)() =
+\mathrm{finalize}\big(
+    \mathrm{fold}_{p \in P}(\mathrm{post}_p,\, \mathrm{tryExec}(s))
+\big)
+\]
+
+\subsection{Execution Semantics}
+\[
+\mathrm{tryExec}(s) =
+\begin{cases}
+    (s(), \bot) & \text{if handler succeeds}\\[4pt]
+    (\bot, e) & \text{if handler throws exception } e
+\end{cases}
+\]
+
+\subsection{Temporal Property}
+
+\[
+\forall c \in C,\, \exists! p \in P : \mathrm{exec}(c) \prec \mathrm{post}_p(c,r,e)
+\]
+
+This temporal property ensures that for every command $c$, exactly one post-processor 
+$p$ is invoked, and it always occurs strictly after the command's execution event. 
+It enforces both ordering and uniqueness in the lifecycle of a command.
+
+\paragraph{Resilience Extension.}
+In the presence of systemic failures (e.g., transient network or database unavailability),
+the temporal property is extended with fallback semantics.
+If $\mathrm{exec}(c)$ cannot complete successfully, a resilience mechanism 
+(such as Resilience4J retries) attempts recovery:
+
+\[
+\forall c \in C,\ \exists! p \in P :
+\big(
+    \mathrm{exec}(c) \prec \mathrm{post}_p(c,r,e)
+\big)
+\ \lor\
+\big(
+    \mathrm{fail}(c) \Rightarrow \Diamond\, \mathrm{retry}(c)
+\big)
+\]
+
+If recovery eventually fails, the system propagates an explicit exception,
+preserving state consistency and traceability throughout the command lifecycle.

@@ -1,0 +1,17 @@
+\subsection{Command}
+\begin{algorithm}[H]
+\caption{Command (\emph{Class})}
+\begin{algorithmic}[1]
+\Procedure{Command}{Command\textlangle T\textrangle}
+    \State \textbf{Fields:}
+    \State \quad id : UUID
+    \State \quad idempotencyKey : String
+    \State \quad status : String
+    \State \quad createdAt : DateTime
+    \State \quad updatedAt : DateTime
+    \State \quad tenantId : String
+    \State \quad username : String
+    \State \quad payload : T
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
