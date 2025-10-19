@@ -10,3 +10,6 @@ CQRS_v1.log
 CQRS_v1.out
 CQRS_v1.pdf
 CQRS_v1.synctex.gz
+sections/indent.log
+.gitignore
+sections/uml/indent.log
