@@ -1,4 +1,23 @@
 \subsection{CommandExecutor}
+% \begin{algorithm}[H]
+% \caption{CommandExecutor (\emph{Interface})}
+% \begin{algorithmic}[1]
+% \Procedure{Execute}{command : Command\textlangle REQ\textrangle} 
+%     \State \textbf{Input:} command of type \textlangle REQ\textrangle
+%     \State \textbf{Output:} Supplier \textlangle RES\textrangle
+%     \State \textbf{Returns:} A function (Supplier) that produces a result of type \textlangle RES\textrangle\ when invoked
+% \EndProcedure
+% \end{algorithmic}
+% \end{algorithm}
+
+The \texttt{CommandExecutor} interface defines the contract for executing
+a given \texttt{Command} instance. It encapsulates the functional semantics
+of deferred execution by returning a \texttt{Supplier\textlangle RES\textrangle},
+allowing commands to be executed lazily or within transactional contexts.
+This abstraction decouples the command dispatch logic from the actual
+execution strategy, enabling flexible orchestration, retries, and
+interceptor-based workflows.
+
 \begin{algorithm}[H]
 \caption{CommandExecutor (\emph{Interface})}
 \begin{algorithmic}[1]
@@ -9,3 +28,9 @@
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}
+
+\noindent
+In this interface, each command is associated with a type-safe request–response
+pair \textlangle REQ, RES\textrangle. Implementations may wrap the returned
+\texttt{Supplier} with cross-cutting behaviors such as retry logic, audit
+propagation, or asynchronous scheduling depending on the configured interceptor chain.

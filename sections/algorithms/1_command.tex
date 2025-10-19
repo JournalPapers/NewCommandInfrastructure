@@ -1,17 +1,46 @@
 \subsection{Command}
+% \begin{algorithm}[H]
+% \caption{Command (\emph{Class})}
+% \begin{algorithmic}[1]
+% \Procedure{Command}{Command\textlangle T\textrangle}
+%     \State \textbf{Fields:}
+%     \State \quad id : UUID
+%     \State \quad idempotencyKey : String
+%     \State \quad status : String
+%     \State \quad createdAt : DateTime
+%     \State \quad updatedAt : DateTime
+%     \State \quad tenantId : String
+%     \State \quad username : String
+%     \State \quad payload : T
+% \EndProcedure
+% \end{algorithmic}
+% \end{algorithm}
+
+The \texttt{Command} class represents the fundamental unit of execution
+in the EOIW framework. Each command encapsulates the metadata required for
+tracking, auditing, and ensuring idempotency during processing.
+
 \begin{algorithm}[H]
 \caption{Command (\emph{Class})}
 \begin{algorithmic}[1]
 \Procedure{Command}{Command\textlangle T\textrangle}
     \State \textbf{Fields:}
+    \Statex \Comment{Metadata fields for tracking and auditing}
     \State \quad id : UUID
     \State \quad idempotencyKey : String
+    \Statex \Comment{Status and timestamps}
     \State \quad status : String
     \State \quad createdAt : DateTime
     \State \quad updatedAt : DateTime
+    \Statex \Comment{Tenant and user context}
     \State \quad tenantId : String
     \State \quad username : String
+    \Statex \Comment{Generic payload}
     \State \quad payload : T
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}
+
+\noindent
+This class serves as a base abstraction for all executable operations. Each
+subclass specializes the \texttt{payload} field to represent domain-specific data.
