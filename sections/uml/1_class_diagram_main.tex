@@ -9,9 +9,13 @@
 \def\yC{-6}
 \def\yD{-9}
 
-\begin{umlpackage} [x=\xA, y=\yA, type=package] {cqrs}
+\begin{umlpackage} [x=\xA, y=\yA, type=package] {controller}
 
-\umlemptyclass [type=controller, width=10ex, template={T}, x=\xB, y=\yA] {Command}
+\umlemptyclass [type=class, width=10ex, template={T}, x=\xB, y=\yA] {Command}
+\umlclass[x=\xC, y=\yA]{Request}{
++ payload:T
+}
+
 \umlemptyclass [type=interface, x=\xA, y=\yB] {CommandPipeline}
 \umlemptyclass [type=interface, x=\xB, y=\yB] {CommandExecutor}
 \umlemptyclass [type=interface, x=\xC, y=\yB] {CommandMiddleware}
@@ -20,15 +24,18 @@
 \umlemptyclass [x=\xA, y=\yC] {Implementation}
 \umlemptyclass [type=interface, x=\xA, y=\yD] {CommandPostProcessor}
 \umlemptyclass [type=service, x=\xC, y=\yD] {Handlers}
+\umlemptyclass [type=object, x=\xB, y=\yD] {Response}
 
 \umldep[geometry=|-, stereo=depends]{CommandPipeline}{Command}
-\umlunicompo [geometry=-|-, arg2=a, mult2=1, pos2=0.9] {CommandPipeline}{CommandExecutor}
-\umlunicompo [geometry=-|-, arg2=a, mult2=1, pos2=0.9] {CommandExecutor}{CommandMiddleware}
+\umlunicompo [geometry=-|-] {Command}{Request}
+\umlunicompo [geometry=-|-] {CommandPipeline}{CommandExecutor}
+\umlunicompo [geometry=-|-] {CommandExecutor}{CommandMiddleware}
 \umlunicompo [geometry=|-|, weight=0.5] {CommandMiddleware}{CommandRouter}
 \umlunicompo [geometry=-|-, weight=0.5] {CommandRouter}{CommandHandler}
 \umlimpl [geometry=|-|, weight=0.5] {Implementation}{CommandPipeline}
 \umlunicompo {Implementation}{CommandPostProcessor}
 \umldep[stereo=implements]{CommandHandler}{Handlers}
+\umldep[geometry=-|-, weight=0.55, anchor1=-10, stereo=binds, pos stereo=1.75]{CommandPipeline}{Response}
 
 \end{umlpackage}
 \end{tikzpicture}
