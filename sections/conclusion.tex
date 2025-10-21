@@ -22,7 +22,7 @@ While EOIW establishes a solid foundation for orchestrated command pipelines, se
     
     \item \textbf{Event Sourcing Integration:} Integrating event sourcing with EOIW could further enhance system resilience and auditability. By persisting state transitions as immutable events, the framework could enable advanced recovery mechanisms, historical replay of command pipelines, and enhanced debugging capabilities.
     
-    \item \textbf{AI-Assisted Command Routing and Pattern Detection:} Leveraging machine learning techniques to analyze command execution patterns could enable predictive routing, dynamic optimization of interceptor chains, and anomaly detection in real time. AI-assisted orchestration could optimize resource utilization and reduce latency under variable workloads, pushing EOIW toward adaptive, self-tuning command processing pipelines.
+    \item \textbf{AI-Assisted Command Routing and Pattern Detection:} Leveraging machine learning techniques to analyze command execution patterns could enable predictive routing, dynamic optimization of interceptor chains, and anomaly detection in real time. \shortcite{kollmann2024towards} AI-assisted orchestration could optimize resource utilization and reduce latency under variable workloads, pushing EOIW toward adaptive, self-tuning command processing pipelines. \shortcite{khaledian2024ai}
 \end{itemize}
 
 These future directions aim to expand EOIW’s applicability to complex, high-volume, and highly dynamic enterprise systems, fostering further research in high-performance, pattern-driven command processing architectures. By combining deterministic execution guarantees with extensibility and adaptability, EOIW can serve as a robust foundation for next-generation enterprise applications.
@@ -30,9 +30,9 @@ These future directions aim to expand EOIW’s applicability to complex, high-vo
 \subsubsection{Practical Recommendations} 
 Based on our study and implementation experience, we recommend:
 \begin{itemize}
-    \item Designing interceptor chains with clear separation between core business logic and operational concerns.
+    \item Designing interceptor chains with clear separation between core business logic and operational concerns. \shortcite{gokhale2005performability}
     \item Using declarative pipeline configuration rather than hard-coded sequences to facilitate runtime extensibility.
-    \item Implementing idempotent handlers and well-defined retry policies to improve resilience in distributed environments.
+    \item Implementing idempotent handlers and well-defined retry policies to improve resilience in distributed environments. \shortcite{sabau2021implementation}
     \item Evaluating trade-offs between synchronous and asynchronous execution depending on latency requirements and throughput targets.
-    \item Integrating observability mechanisms (logging, metrics, tracing) at the interceptor level to enable monitoring without polluting business logic.
+    \item Integrating observability mechanisms \shortcite{liu2013observability} (logging, metrics \shortcite{shatnawi2023telemetry}, tracing) at the interceptor level to enable monitoring without polluting business logic. \shortcite{majors2022observability}
 \end{itemize}

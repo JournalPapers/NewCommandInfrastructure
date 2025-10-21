@@ -1,18 +1,6 @@
-% \subsection{CommandMiddleware}
-% \begin{algorithm}[H]
-% \caption{CommandMiddleware (\emph{Interface})}
-% \begin{algorithmic}[1]
-% \Procedure{Invoke}{command : Command\textlangle ?\textrangle} 
-%     \State \textbf{Input:} command of any type
-%     \State \textbf{Output:} none
-%     \State \textbf{Description:} Performs pre-processing, validation, logging, or any middleware logic on the command
-% \EndProcedure
-% \end{algorithmic}
-% \end{algorithm}
-
 \subsection{CommandMiddleware}
 
-The \texttt{CommandMiddleware} interface represents the intermediate layer between the command dispatching process and handler execution. Middleware components are responsible for executing cross-cutting concerns such as validation, logging, authorization, resilience policies, and telemetry propagation. Each middleware is executed in a well-defined order within the interceptor chain, forming the orchestration layer of the EOIW pipeline.
+The \texttt{CommandMiddleware} interface represents the intermediate layer \shortcite{vukotic2011apache} between the command dispatching process and handler execution. Middleware components are responsible for executing cross-cutting concerns such as validation, logging, authorization, resilience policies, and telemetry propagation. Each middleware is executed in a well-defined order within the interceptor chain, forming the orchestration layer of the EOIW pipeline.
 
 \begin{algorithm}[H]
 \caption{CommandMiddleware (\emph{Interface})}
