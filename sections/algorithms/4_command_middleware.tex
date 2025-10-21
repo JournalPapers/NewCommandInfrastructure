@@ -1,11 +1,35 @@
+% \subsection{CommandMiddleware}
+% \begin{algorithm}[H]
+% \caption{CommandMiddleware (\emph{Interface})}
+% \begin{algorithmic}[1]
+% \Procedure{Invoke}{command : Command\textlangle ?\textrangle} 
+%     \State \textbf{Input:} command of any type
+%     \State \textbf{Output:} none
+%     \State \textbf{Description:} Performs pre-processing, validation, logging, or any middleware logic on the command
+% \EndProcedure
+% \end{algorithmic}
+% \end{algorithm}
+
 \subsection{CommandMiddleware}
+
+The \texttt{CommandMiddleware} interface represents the intermediate layer between the command dispatching process and handler execution. Middleware components are responsible for executing cross-cutting concerns such as validation, logging, authorization, resilience policies, and telemetry propagation. Each middleware is executed in a well-defined order within the interceptor chain, forming the orchestration layer of the EOIW pipeline.
+
 \begin{algorithm}[H]
 \caption{CommandMiddleware (\emph{Interface})}
 \begin{algorithmic}[1]
-\Procedure{Invoke}{command : Command\textlangle ?\textrangle} 
-    \State \textbf{Input:} command of any type
+\Procedure{Invoke}{command : Command\textlangle ?\textrangle}
+    \State \textbf{Input:} command of any generic type
     \State \textbf{Output:} none
-    \State \textbf{Description:} Performs pre-processing, validation, logging, or any middleware logic on the command
+    \State \textbf{Description:} Performs pre-processing, validation, logging, or other middleware logic before or after command handling.
+\EndProcedure
+
+\Procedure{Next}{command : Command\textlangle ?\textrangle}
+    \State \textbf{Input:} command passed to the next middleware in the chain
+    \State \textbf{Output:} continuation to the next interceptor
+    \State \textbf{Description:} Delegates command execution to the subsequent middleware or handler in the chain, forming a composable pipeline:
+    \[
+        \mathcal{M}_1 \circ \mathcal{M}_2 \circ \dots \circ \mathcal{M}_n \Rightarrow \mathcal{H}
+    \]
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}

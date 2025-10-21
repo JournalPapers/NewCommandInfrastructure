@@ -1,11 +1,47 @@
-\subsection{CommandPostProcessor} 
+% \subsection{CommandPostProcessor} 
+% \begin{algorithm}[H]
+% \caption{CommandPostProcessor (\emph{Interface})}
+% \begin{algorithmic}[1]
+% \Procedure{Run}{command : Command\textlangle T\textrangle} 
+%     \State \textbf{Input:} command of type \textlangle T\textrangle
+%     \State \textbf{Output:} none
+%     \State \textbf{Description:} Performs post-processing actions on the command after execution, such as retry, logging, auditing, or notifications
+% \EndProcedure
+% \end{algorithmic}
+% \end{algorithm}
+
+\subsection{CommandPostProcessor}
+
+The \texttt{CommandPostProcessor} interface represents the final stage of the EOIW execution lifecycle.  
+It is responsible for performing auxiliary operations after the successful (or failed) execution of a command.  
+Formally, it defines a mapping from an executed command $C_T$ and its outcome $R_T$ to a set of side effects or compensating actions $\Phi(C_T, R_T)$ such that:
+
+\[
+\Phi : (\mathcal{C}_T, \mathcal{R}_T) \rightarrow \mathcal{E}
+\]
+
+where $\mathcal{E}$ denotes the set of post-execution effects (e.g., audit logs, retries, notifications).  
+This design isolates non-functional concerns from the command handler, improving modularity and resilience.
+
 \begin{algorithm}[H]
 \caption{CommandPostProcessor (\emph{Interface})}
 \begin{algorithmic}[1]
-\Procedure{Run}{command : Command\textlangle T\textrangle} 
+\Procedure{Run}{command : Command\textlangle T\textrangle}
     \State \textbf{Input:} command of type \textlangle T\textrangle
     \State \textbf{Output:} none
-    \State \textbf{Description:} Performs post-processing actions on the command after execution, such as retry, logging, auditing, or notifications
+    \State \textbf{Description:} 
+        Executes post-processing logic after the main command has completed.
+        Typical actions include:
+        \begin{itemize}
+            \item $\Phi_1$: persisting audit logs or metrics,
+            \item $\Phi_2$: triggering retries for transient failures,
+            \item $\Phi_3$: sending notifications or domain events,
+            \item $\Phi_4$: cleaning up temporary state or caches.
+        \end{itemize}
+        The post-processor may be composed as a continuation $\mathcal{P}^+$ to the main pipeline $\mathcal{P}$:
+        \[
+            \mathcal{P}^+(C) = \Phi(C, \mathcal{P}(C))
+        \]
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}

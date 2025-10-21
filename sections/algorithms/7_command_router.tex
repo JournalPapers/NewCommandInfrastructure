@@ -1,12 +1,83 @@
-\subsection{CommandRouter} 
+% \subsection{CommandRouter} 
+% \begin{algorithm}[H]
+% \caption{CommandRouter (\emph{Interface})}
+% \begin{algorithmic}[1]
+% \Procedure{Route}{command : Command\textlangle REQ\textrangle} 
+%     \State \textbf{Input:} command of type \textlangle REQ\textrangle
+%     \State \textbf{Output:} CommandHandler of type\textlangle REQ, RES\textrangle
+%     \State \textbf{Returns:} the handler responsible for processing the given command
+%     \State \textbf{Description:} Determines the appropriate handler for the command based on its payload or type
+% \EndProcedure
+% \end{algorithmic}
+% \end{algorithm}
+
+% \subsection{CommandRouter}
+
+% The \texttt{CommandRouter} interface defines the routing mechanism that maps each command to its corresponding handler.  
+% It is responsible for ensuring that a command of type $\tau_P$ is dispatched only to a handler capable of processing that payload type $\tau_H$, following the eligibility constraint:
+
+% \[
+% \tau_H \sqsubseteq \tau_P \implies \text{handler is eligible for payload type } \tau_P
+% \]
+
+% Formally, the router defines a partial function:
+% \[
+% \rho : \mathcal{C}_{\tau_P} \rightarrow \mathcal{H}_{\tau_H}
+% \]
+% where $\mathcal{C}_{\tau_P}$ is the set of all command instances and $\mathcal{H}_{\tau_H}$ is the set of valid handlers.  
+% If no suitable handler exists, $\rho$ may yield $\bot$ (undefined), triggering a \texttt{CommandNotRoutableException} or equivalent recovery mechanism.
+
+% \begin{algorithm}[H]
+% \caption{CommandRouter (\emph{Interface})}
+% \begin{algorithmic}[1]
+% \Procedure{Route}{command : Command\textlangle REQ\textrangle}
+%     \State \textbf{Input:} command of type \textlangle REQ\textrangle
+%     \State \textbf{Output:} CommandHandler of type \textlangle REQ, RES\textrangle
+%     \State \textbf{Returns:} the handler responsible for processing the given command
+%     \State \textbf{Description:} 
+%         Determines the appropriate handler for the command based on its payload or type.
+%         The routing process ensures type safety and deterministic dispatch:
+%         \begin{itemize}
+%             \item If multiple handlers are eligible, a priority or specificity rule is applied.
+%             \item If no handler is found, a fallback or dead-letter route is invoked.
+%             \item The resolution may be cached for repeated command types.
+%         \end{itemize}
+% \EndProcedure
+% \end{algorithmic}
+% \end{algorithm}
+
+\subsection{CommandRouter}
+
+The \texttt{CommandRouter} interface defines the routing mechanism that maps each command to a corresponding handler.  
+It ensures that a command of type $\tau_P$ is dispatched only to a handler capable of processing that payload type $\tau_H$, following the eligibility constraint:
+
+\[
+\tau_H \sqsubseteq \tau_P \implies \text{handler is eligible for payload type } \tau_P
+\]
+
+Formally, the router defines a partial function:
+
+\[
+\rho : \mathcal{C}_{\tau_P} \rightarrow \mathcal{H}_{\tau_H}
+\]
+
+where $\mathcal{C}_{\tau_P}$ is the set of all command instances and $\mathcal{H}_{\tau_H}$ is the set of valid handlers.  
+If no suitable handler exists, $\rho$ may yield $\bot$ (undefined), triggering a \texttt{CommandNotRoutableException} or an equivalent recovery mechanism.
+
 \begin{algorithm}[H]
 \caption{CommandRouter (\emph{Interface})}
 \begin{algorithmic}[1]
-\Procedure{Route}{command : Command\textlangle REQ\textrangle} 
+\Procedure{Route}{command : Command\textlangle REQ\textrangle}
     \State \textbf{Input:} command of type \textlangle REQ\textrangle
-    \State \textbf{Output:} CommandHandler of type\textlangle REQ, RES\textrangle
-    \State \textbf{Returns:} the handler responsible for processing the given command
-    \State \textbf{Description:} Determines the appropriate handler for the command based on its payload or type
+    \State \textbf{Output:} CommandHandler of type \textlangle REQ, RES\textrangle
+    \State \textbf{Returns:} the first matching handler responsible for processing the command
+    \State \textbf{Description:} 
+        Determines the appropriate handler based on the types of the request and expected response objects.
+        \begin{itemize}
+            \item The router scans the list of registered handlers and selects the first handler whose type matches the command payload.
+            \item If multiple handlers are eligible, only the first match is returned.
+            \item If no handler matches, a runtime exception or fallback mechanism is triggered.
+        \end{itemize}
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}

@@ -1,30 +1,84 @@
-\subsection{DefaultCommandPipelineImplementation} 
+% \subsection{DefaultCommandPipelineImplementation} 
+% \begin{algorithm}[H]
+% \caption{DefaultCommandPipelineImplementation (\emph{Class})}
+% \begin{algorithmic}[1]
+
+% \Procedure{Send}{command : Command\textlangle REQ\textrangle} 
+%     \State \textbf{Input:} command of type \textlangle REQ\textrangle
+%     \State \textbf{Output:} Supplier of type \textlangle RES\textrangle
+%     \State Ensure command is not null
+%     \State baseSupplier $\gets$ executor.Execute(command) \Comment{Base supplier executes handler and middleware}
+
+%     \State \textbf{Return} a Supplier that, when invoked, does:
+%     \State \quad result $\gets$ null
+%     \State \quad exception $\gets$ null
+%     \State \quad \textbf{Try}
+%     \State \quad \quad result $\gets$ baseSupplier.Get() \Comment{Execute handler logic}
+%     \State \quad \textbf{Catch} ex
+%     \State \quad \quad exception $\gets$ ex
+%     \State \quad \textbf{End Try}
+
+%     \State \quad \textbf{For each} postProcess in postProcesses \textbf{do}
+%     \State \quad \quad typedProcessor $\gets$ (cast) postProcess to CommandPostProcessor \textlangle REQ\textrangle
+%     \State \quad \quad typedProcessor.Run(command) \Comment{Execute post-processing}
+%     \State \quad \textbf{End For}
+
+%     \State \quad \textbf{If} exception $\neq$ null \textbf{then}
+%     \State \quad \quad throw RuntimeException("Handler execution failed", exception)
+%     \State \quad \textbf{End If}
+
+%     \State \quad \textbf{Return} result
+% \EndProcedure
+
+% \end{algorithmic}
+% \end{algorithm}
+
+\subsection{DefaultCommandPipelineImplementation}
+
+The \texttt{DefaultCommandPipelineImplementation} represents the concrete realization of the \texttt{CommandPipeline} interface.  
+It coordinates the execution of commands through a series of middleware, handlers, and post-processors, ensuring type-safe dispatch and lazy evaluation.  
+The pipeline encapsulates the complete command lifecycle:
+
+\[
+\text{Command} \xrightarrow{\text{Executor}} \text{Handler} 
+\xrightarrow{\text{Result}} \text{PostProcessor}^{*}
+\]
+
+Formally, given a command $c_{\tau_P}$ of type $\tau_P$, the pipeline defines:
+\[
+\pi(c_{\tau_P}) = \lambda () \rightarrow h_{\tau_H}(c_{\tau_P})
+\]
+where $h_{\tau_H}$ is the matching handler, and the returned function is a lazy supplier of the eventual result.
+
 \begin{algorithm}[H]
 \caption{DefaultCommandPipelineImplementation (\emph{Class})}
 \begin{algorithmic}[1]
 
-\Procedure{Send}{command : Command\textlangle REQ\textrangle} 
+\Procedure{Send}{command : Command\textlangle REQ\textrangle}
     \State \textbf{Input:} command of type \textlangle REQ\textrangle
     \State \textbf{Output:} Supplier of type \textlangle RES\textrangle
-    \State Ensure command is not null
-    \State baseSupplier $\gets$ executor.Execute(command) \Comment{Base supplier executes handler and middleware}
+    \State \textbf{Precondition:} command must not be null
+    \State baseSupplier $\gets$ executor.Execute(command)
+        \Comment{Base supplier executes handler and middleware chain}
 
-    \State \textbf{Return} a Supplier that, when invoked, does:
+    \State \textbf{Return} a Supplier that, when invoked, performs:
     \State \quad result $\gets$ null
     \State \quad exception $\gets$ null
     \State \quad \textbf{Try}
-    \State \quad \quad result $\gets$ baseSupplier.Get() \Comment{Execute handler logic}
+    \State \quad \quad result $\gets$ baseSupplier.Get()
+        \Comment{Invoke the actual command handler lazily}
     \State \quad \textbf{Catch} ex
     \State \quad \quad exception $\gets$ ex
     \State \quad \textbf{End Try}
 
-    \State \quad \textbf{For each} postProcess in postProcesses \textbf{do}
-    \State \quad \quad typedProcessor $\gets$ (cast) postProcess to CommandPostProcessor \textlangle REQ\textrangle
-    \State \quad \quad typedProcessor.Run(command) \Comment{Execute post-processing}
+    \State \quad \textbf{For each} postProcess \textbf{in} postProcesses \textbf{do}
+    \State \quad \quad typedProcessor $\gets$ (cast) postProcess to CommandPostProcessor\textlangle REQ\textrangle
+    \State \quad \quad typedProcessor.Run(command)
+        \Comment{Apply post-processing (e.g., logging, auditing, retry)}
     \State \quad \textbf{End For}
 
     \State \quad \textbf{If} exception $\neq$ null \textbf{then}
-    \State \quad \quad throw RuntimeException("Handler execution failed", exception)
+    \State \quad \quad throw RuntimeException(\texttt{"Handler execution failed"}, exception)
     \State \quad \textbf{End If}
 
     \State \quad \textbf{Return} result
@@ -32,3 +86,6 @@
 
 \end{algorithmic}
 \end{algorithm}
+
+The returned supplier enforces \textbf{lazy evaluation}: execution occurs only when the supplier is invoked.  
+This pattern allows deferred computation, resilience policies (e.g., retries or circuit breakers), and consistent post-processing even under handler exceptions.
