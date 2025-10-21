@@ -7,7 +7,7 @@ The motivation for this work stems from the necessity to decouple operational co
 This paper focuses on the command side of CQRS, specifically addressing synchronous/asynchronous/disruptor processing, middleware orchestration, routing, and handler execution. By abstracting execution concerns and enabling dynamic extension of interceptor chains, our approach ensures cleaner separation of responsibilities and better runtime adaptability. The scope is confined to command-side processing, leaving the query side for future exploration \cite{pipelineArchitecture,crosscuttingPipelineArchitecture}.
 
 \subsection{Problem Statement}
-Command processing in modern enterprise systems, particularly in CQRS architectures, often suffers from complexity, latency, and maintainability issues. Traditional implementations tend to intertwine business logic with cross-cutting concerns such as logging, retry handling, and audit propagation. This tight coupling makes pipelines brittle and difficult to evolve as the system scales. Formally, let a command pipeline be represented as $\mathcal{P} = \{s_1, s_2, \dots, s_n\}$, where $s_i \in S$ denotes a stage of execution. Without proper abstraction, each $s_i$ mixes business logic $B(s_i)$ with operational concerns $O(s_i)$, leading to high coupling and reduced maintainability \cite{martinFowlerCQRS}:
+Command processing in modern enterprise systems, particularly in CQRS architectures, often suffers from complexity, latency, and maintainability issues. Traditional implementations tend to muddle business logic with cross-cutting concerns such as logging, retry handling, and audit propagation. This tight coupling makes pipelines brittle and difficult to evolve as the system scales. Formally, let a command pipeline be represented as $\mathcal{P} = \{s_1, s_2, \dots, s_n\}$, where $s_i \in S$ denotes a stage of execution. Without proper abstraction, each $s_i$ mixes business logic $B(s_i)$ with operational concerns $O(s_i)$, leading to high coupling and reduced maintainability \cite{martinFowlerCQRS}:
 \[
 s_i = B(s_i) + O(s_i), \quad \forall i = 1, \dots, n
 \]
@@ -28,5 +28,5 @@ The paper makes several key contributions:
     \item Introduction of \textbf{Extensible Orchestrated Interceptor Workflows (EOIW)}, a composable and maintainable architecture for command processing pipelines.
     \item Systematic mapping of classical design patterns to CQRS command pipelines, highlighting performance and maintainability trade-offs.
     \item Formal temporal model $\tau$ for command execution and post-processing, ensuring deterministic ordering and resilience semantics under transient system failures.
-    \item Practical implementation using Spring Boot and high-performance command queues, demonstrating measurable improvements in throughput and latency over conventional synchronous CQRS handlers.
+    \item Practical implementation using Jersey(JAX-RS) Spring Boot and high-performance command queues, demonstrating measurable improvements in throughput and latency over conventional synchronous CQRS handlers.
 \end{itemize}

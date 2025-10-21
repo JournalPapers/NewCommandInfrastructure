@@ -1,88 +1,4 @@
 \subsection{CommandPipeline} 
-% \begin{algorithm}[H]
-% \caption{CommandPipeline (\emph{Interface})}
-% \begin{algorithmic}[1]
-% \Procedure{Send}{command : Command\textlangle REQ\textrangle} 
-%     \State \textbf{Input:} command of type \textlangle REQ\textrangle
-%     \State \textbf{Output:} Supplier of type \textlangle RES\textrangle
-%     \State \textbf{Returns:} a function that produces the result when invoked
-%     \State \textbf{Description:} Sends the command through the pipeline, applying any middleware and invoking the matching handler
-% \EndProcedure
-% \end{algorithmic}
-% \end{algorithm}
-
-% \subsection{CommandPipeline}
-
-% The \texttt{CommandPipeline} interface represents the orchestration layer responsible for managing the end-to-end flow of a command from submission to completion. It serves as the central entry point of the EOIW architecture, coordinating middleware invocation, handler resolution, and response propagation. Formally, the pipeline $\mathcal{P}$ defines a sequential composition of middleware and a terminal handler:
-
-% \[
-% \mathcal{P}(C) = (\mathcal{M}_1 \circ \mathcal{M}_2 \circ \dots \circ \mathcal{M}_n \circ \mathcal{H})(C)
-% \]
-
-% where each $\mathcal{M}_i$ represents a middleware stage and $\mathcal{H}$ denotes the final handler.  
-% This composable functional model ensures modularity, runtime extensibility, and deterministic execution semantics.
-
-% \begin{algorithm}[H]
-% \caption{CommandPipeline (\emph{Interface})}
-% \begin{algorithmic}[1]
-% \Procedure{Send}{command : Command\textlangle REQ\textrangle}
-%     \State \textbf{Input:} command of type \textlangle REQ\textrangle
-%     \State \textbf{Output:} Supplier\textlangle RES\textrangle
-%     \State \textbf{Returns:} a lazily evaluated function that produces the result when invoked
-%     \State \textbf{Description:} 
-%     Initiates command execution by passing the command through the configured pipeline.
-%     Each middleware $\mathcal{M}_i$ may perform cross-cutting operations (validation, retry, logging)
-%     before delegating to the next stage, ultimately reaching the handler $\mathcal{H}$.
-%     \[
-%         \mathcal{P} : \mathcal{C}_{REQ} \rightarrow \mathcal{S}_{RES}, \quad
-%         \mathcal{P}(C) = \mathcal{H}(\mathcal{M}_n(\dots \mathcal{M}_1(C) \dots))
-%     \]
-% \EndProcedure
-% \end{algorithmic}
-% \end{algorithm}
-
-% The \texttt{CommandPipeline} interface represents the orchestration layer responsible for managing 
-% the end-to-end flow of a command from submission to completion. 
-% It serves as the central entry point of the EOIW architecture, coordinating middleware invocation, 
-% handler resolution, and post-processing actions.
-
-% Formally, the pipeline $\mathcal{P}$ can be defined as:
-
-% \[
-% \mathcal{P}(C) = (\mathcal{P\!P}_1 \circ \dots \circ \mathcal{P\!P}_m \circ \mathcal{H} \circ \mathcal{M}_n \circ \dots \circ \mathcal{M}_1)(C)
-% \]
-
-% where 
-% \(\mathcal{M}_i\) represents middleware stages, 
-% \(\mathcal{H}\) denotes the terminal handler, and 
-% \(\mathcal{P\!P}_j\) represents post-processing stages (logging, auditing, notifications, retries).
-
-% This model explicitly captures the **full lifecycle** of a command:
-% 1. **Middleware** – pre-processing and cross-cutting concerns.
-% 2. **Handler** – executes core business logic.
-% 3. **Post-Processors** – post-execution actions ensuring auditing, retry semantics, or additional side effects.
-
-% \begin{algorithm}[H]
-% \caption{CommandPipeline (\emph{Interface})}
-% \begin{algorithmic}[1]
-% \Procedure{Send}{command : Command\textlangle REQ\textrangle}
-%     \State \textbf{Input:} command of type \textlangle REQ\textrangle
-%     \State \textbf{Output:} Supplier\textlangle RES\textrangle
-%     \State \textbf{Returns:} a lazily evaluated function that produces the result when invoked
-%     \State \textbf{Description:} 
-%     Initiates command execution by passing the command through the configured pipeline:
-%     \begin{enumerate}
-%         \item Each middleware $\mathcal{M}_i$ performs pre-processing (validation, logging, retry).
-%         \item The command reaches the terminal handler $\mathcal{H}$ for core business logic execution.
-%         \item Post-processing stages $\mathcal{P\!P}_j$ execute in sequence, performing actions like audit logging, notifications, or retries.
-%     \end{enumerate}
-%     \[
-%         \mathcal{P} : \mathcal{C}_{REQ} \rightarrow \mathcal{S}_{RES}, \quad
-%         \mathcal{P}(C) = \mathcal{P\!P}_m(\dots \mathcal{P\!P}_1(\mathcal{H}(\mathcal{M}_n(\dots \mathcal{M}_1(C) \dots)))) 
-%     \]
-% \EndProcedure
-% \end{algorithmic}
-% \end{algorithm}
 
 The \texttt{CommandPipeline} interface represents the orchestration layer responsible for managing 
 the end-to-end flow of a command from submission to completion. 
@@ -90,24 +6,22 @@ It serves as the central entry point of the EOIW architecture, coordinating midd
 handler resolution, and post-processing actions.
 
 Formally, the pipeline $\mathcal{P}$ can be defined as:
-
 \[
 \mathcal{P}(C) = (\mathcal{P\!P}_1 \circ \dots \circ \mathcal{P\!P}_m \circ \mathcal{H} \circ \mathcal{M}_n \circ \dots \circ \mathcal{M}_1)(C)
 \]
-
 where 
 \(\mathcal{M}_i\) represents middleware stages, 
 \(\mathcal{H}\) denotes the terminal handler, and 
 \(\mathcal{P\!P}_j\) represents post-processing stages (logging, auditing, notifications, retries).
 
-This model explicitly captures the **full lifecycle** of a command:
+This model explicitly captures the \textbf{full lifecycle} of a command:
 \begin{enumerate}
     \item \textbf{Middleware} – pre-processing and cross-cutting concerns.
     \item \textbf{Handler} – executes core business logic.
     \item \textbf{Post-Processors} – post-execution actions ensuring auditing, retry semantics, or additional side effects.
 \end{enumerate}
 
-The actual evaluation of the command logic is **lazy**; the pipeline produces a `Supplier` (or callable) 
+The actual evaluation of the command logic is \textbf{lazy}; the pipeline produces a `Supplier` (or callable) 
 that encapsulates the execution. The command is only executed when the API or client explicitly triggers it, 
 allowing composable, runtime-extensible pipelines with controlled evaluation timing.
 

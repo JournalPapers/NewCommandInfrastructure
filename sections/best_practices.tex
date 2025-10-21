@@ -6,7 +6,8 @@ High-performance command processing pipelines require disciplined architectural 
 The Command pattern encapsulates a request as an object, separating the responsibility of issuing a command from the execution logic. Using the Command pattern consistently across all operations ensures:
 
 \begin{itemize}
-    \item \textbf{Decoupling of senders and receivers:} Pipeline stages can operate independently without tight coupling to business logic.
+    \item \textbf{Decoupling of senders and receivers:} Pipeline orchestration stages can operate independently without tight 
+    coupling to business logic.
     \item \textbf{Enhanced testability:} Each command can be independently tested, mocked, or replayed.
     \item \textbf{Support for cross-cutting concerns:} Features such as logging, auditing, retries, and undo functionality can be applied uniformly across all commands without modifying core business logic.
 \end{itemize}

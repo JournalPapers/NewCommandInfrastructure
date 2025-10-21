@@ -48,21 +48,30 @@ and
 \]
 
 \subsection{Temporal Property}
+A more precise formulation of the temporal property, separating orchestration from execution, is:
+\begin{align}
+\forall c \in C,\, \exists! r \in R, e \in E : \quad
+& \underbrace{\mathrm{pre}_{m_1} \circ \dots \circ \mathrm{pre}_{m_n}}_{\text{middleware orchestration}}(c) \notag\\
+& \;\to\; 
+\underbrace{\mathrm{exec}_h(c)}_{\text{command execution}} \notag\\
+& \;\to\; 
+\underbrace{\mathrm{post}_{p_1} \circ \dots \circ \mathrm{post}_{p_m}}_{\text{post-processing orchestration}}(c,r,e)
+\end{align}
 
-\[
-\forall c \in C,\, \exists! p \in P : \mathrm{exec}(c) \prec \mathrm{post}_p(c,r,e)
-\]
+Where:
+\begin{itemize}
+    \item $\mathrm{pre}_{m_i}$ – middleware transformation and side-effects (validation, logging, etc.) before command execution.
+    \item $\mathrm{exec}_h$ – the actual handler invocation performing the command's business logic, producing $r \in R$ or $e \in E$.
+    \item $\mathrm{post}_{p_j}$ – post-processors applied sequentially after successful or failed execution for auditing, retries, notifications, etc.
+\end{itemize}
 
-This temporal property ensures that for every command $c$, exactly one post-processor 
-$p$ is invoked, and it always occurs strictly after the command's execution event. 
-It enforces both ordering and uniqueness in the lifecycle of a command.
+This separation makes it explicit that \textbf{pipeline orchestration (middleware and post-processing sequencing) is distinct from the core command execution}, even though the temporal property ensures deterministic and traceable sequencing across the full lifecycle.
 
 \paragraph{Resilience Extension.}
 In the presence of systemic failures (e.g., transient network or database unavailability),
 the temporal property is extended with fallback semantics.
 If $\mathrm{exec}(c)$ cannot complete successfully, a resilience mechanism 
 (such as Resilience4J retries) attempts recovery:
-
 \[
 \forall c \in C,\ \exists! p \in P :
 \big(
@@ -76,3 +85,5 @@ If $\mathrm{exec}(c)$ cannot complete successfully, a resilience mechanism
 
 If recovery eventually fails, the system propagates an explicit exception,
 preserving state consistency and traceability throughout the command lifecycle.
+
+
