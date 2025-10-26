@@ -12,7 +12,7 @@ The Command pattern encapsulates a request as an object, separating the responsi
     \item \textbf{Support for cross-cutting concerns:} Features such as logging, auditing, retries, and undo functionality can be applied uniformly across all commands without modifying core business logic.
 \end{itemize}
 
-Standardizing command representation ensures that interceptor chains and orchestration layers can process all commands uniformly, improving composability and predictability \cite{gamma1994design,martinFowlerCQRS}.
+Standardizing command representation ensures that interceptor chains and orchestration layers can process all commands uniformly, improving composability and predictability \cite{gamma1994design}.
 
 \subsection{Lightweight and Composable Middleware}
 Middleware in command pipelines should be small, modular, and composable, avoiding heavy monolithic components. This enables:
@@ -34,7 +34,7 @@ For high-performance command processing, adopting event-driven infrastructures s
     \item \textbf{Backpressure handling:} Event-driven frameworks allow the system to gracefully handle surges in command volume.
 \end{itemize}
 
-EOIW leverages these mechanisms to orchestrate commands efficiently, ensuring that high volumes of requests are processed without bottlenecks \cite{LMAXDisruptor}.
+EOIW leverages these mechanisms to orchestrate commands efficiently, ensuring that high volumes of requests are processed without bottlenecks \cite{thompson2011disruptor}.
 
 \subsection{Standardized Command Execution}
 Applying Strategy or Template Method patterns for command execution provides a consistent framework for handling:
@@ -56,4 +56,4 @@ Continuous monitoring of command pipelines is essential to maintain performance 
     \item \textbf{Observability:} Distributed tracing and audit logs ensure visibility into command execution sequences and bottlenecks.
 \end{itemize}
 
-By instrumenting interceptor chains and middleware, EOIW provides comprehensive insights into operational behavior, facilitating proactive maintenance and optimization \cite{observabilityPatterns}.
+By instrumenting interceptor chains and middleware, EOIW provides comprehensive insights into operational behavior, facilitating proactive maintenance and optimization \cite{liu2013observability}.

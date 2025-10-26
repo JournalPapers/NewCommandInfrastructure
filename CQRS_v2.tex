@@ -1,0 +1,55 @@
+\documentclass{article}
+
+% Packages...
+\usepackage[english]{babel}
+\usepackage[letterpaper,top=2cm,bottom=2cm,left=3cm,right=3cm,marginparwidth=1.75cm]{geometry}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{graphicx}
+\usepackage[colorlinks=true, allcolors=blue]{hyperref}
+\usepackage{listings}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{tikz}
+\usepackage{pgf-umlcd}
+\usepackage{tikz-uml}
+\usepackage[T1]{fontenc}
+\usepackage[utf8x]{inputenc}
+\usepackage{apacite}
+
+\usetikzlibrary{positioning, shapes, arrows, backgrounds, fit, shadows, decorations.markings}
+\tikzumlset{fill package=white, fill class=white}
+
+\title{Extensible Orchestrated Interceptor Workflows for High-Performance Processing}
+\author{
+Kapil Panchal\thanks{Email: kapil.panchal.development@gmail.com} \and
+Aleksandar Vidakovic\thanks{Email: cheetah@monkeysintown.com} \and
+}
+\date{}
+\date{November 2025}
+
+\begin{document}
+\maketitle
+
+% Include the abstract
+\input{sections/abstract.tex}
+
+% Include other sections
+\input{sections/introduction.tex}
+\clearpage
+\input{sections/background.tex}
+\clearpage
+\input{sections/formal_model.tex}
+\clearpage
+\input{sections/design_patterns.tex}
+\clearpage
+\input{sections/implementation.tex}
+\clearpage
+\input{sections/best_practices.tex}
+\clearpage
+\input{sections/conclusion.tex}
+\clearpage
+
+\bibliographystyle{apacite}
+\bibliography{References}
+
+\end{document}
