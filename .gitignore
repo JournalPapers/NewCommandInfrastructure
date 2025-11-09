@@ -1,4 +1,4 @@
-frog.jpg
+*.jpg
 LICENSE
 .gitignore
 
@@ -12,3 +12,5 @@ LICENSE
 *.zip
 *.fls
 *.out
+*.png
+License
